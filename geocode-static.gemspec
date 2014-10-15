@@ -8,7 +8,7 @@ Gem::Specification.new do |spec|
   spec.authors       = ["Scott Bronson"]
   spec.email         = ["brons_geost@rinspin.com"]
   spec.summary       = "Generates Ruby code to quickly geocode IP addresses"
-  spec.description   = "Is it possible to geocode an IP address with a single if statement?  No network access, no context switches?  Yes."
+  spec.description   = "Geocode an IP address with a single if statement.  No network access, no context switches, no waiting."
   spec.homepage      = "http://github.com/bronson/geocode-static"
   spec.license       = "MIT"
 
