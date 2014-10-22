@@ -7,7 +7,7 @@ Gem::Specification.new do |spec|
   spec.version       = Geocode::Static::VERSION
   spec.authors       = ["Scott Bronson"]
   spec.email         = ["brons_geost@rinspin.com"]
-  spec.summary       = "Generates Ruby code to quickly geocode IP addresses"
+  spec.summary       = "Generate a Ruby if statement to geocode IP addresses"
   spec.description   = "Geocode an IP address with a single if statement.  No network access, no context switches, no waiting."
   spec.homepage      = "http://github.com/bronson/geocode-static"
   spec.license       = "MIT"
@@ -18,7 +18,6 @@ Gem::Specification.new do |spec|
   spec.require_paths = ["lib"]
 
   spec.add_runtime_dependency "nokogiri"
-  spec.add_runtime_dependency "slop"
 
   spec.add_development_dependency "bundler"
   spec.add_development_dependency "rake"
