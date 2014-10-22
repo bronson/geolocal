@@ -2,7 +2,7 @@ class Geocode::Static::Base
   attr_reader :config
 
   def initialize params={}
-    @config = Geocode::Static.configuration.merge(params)
+    @config = Geocode::Static.configuration.dup
   end
 
   def generate
