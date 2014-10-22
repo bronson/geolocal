@@ -1,5 +1,6 @@
 require "spec_helper"
 
+
 describe "configuration" do
   it "has the right defaults" do
     # these must match the values in the README
@@ -14,7 +15,7 @@ describe "configuration" do
   end
 
 
-  it "can set new module" do
+  it "can set the module configuration" do
     Geocode::Static.configure do |config|
       # config.provider = Geocode::Static::Provider::Test
       config.module = "GeoRanges::Quick"
@@ -26,7 +27,7 @@ describe "configuration" do
   end
 
 
-  describe ".reset" do
+  describe "reset method" do
     before :each do
       Geocode::Static.configure do |config|
         config.module = "Changed"
