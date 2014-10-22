@@ -24,4 +24,19 @@ describe "configuration" do
     expect(config.module).to eq "GeoRanges::Quick"
     expect(config.file).to eq "lib/geo_ranges/quick.rb"
   end
+
+
+  describe ".reset" do
+    before :each do
+      Geocode::Static.configure do |config|
+        config.module = "Changed"
+      end
+    end
+
+    it "resets the configuration" do
+      expect(Geocode::Static.configuration.module).to eq "Changed"
+      Geocode::Static.reset_configuration
+      expect(Geocode::Static.configuration.module).to eq "Geocode"
+    end
+  end
 end
