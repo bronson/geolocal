@@ -1,10 +1,8 @@
-class Geocode::Static::Provider
-  def initialize params
-    @provider = params[:provider]
-    unless @provider
-      require 'geocode/static/provider/db_ip' unless defined?(Geocode::Static::Provider::DB_IP)
-      @provider = Geocode::Static::Provider::DB_IP.new(params)
-    end
+class Geocode::Static::Base
+  attr_reader :config
+
+  def initialize params={}
+    @config = Geocode::Static.configuration.merge(params)
   end
 
   def generate
@@ -65,7 +63,7 @@ end
 
 require 'csv'
 
-class Geocode::Static::Provider::GeoIP
+class Geocode::Static::GeoIP < Geocode::Static::Base
   def download
     # go from here: http://db-ip.com/db/download/country
   end
