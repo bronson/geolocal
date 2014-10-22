@@ -32,7 +32,7 @@ module Geocode
 
       # if not set, defaults to lib/module-name
       def file
-        @file || "lib/#{@module.gsub('::', '/').gsub(/(.)([A-Z])/, '\1_\2').downcase}.rb"
+        @file || "lib/#{@module.gsub('::', '/').gsub(/([a-zA-Z])([A-Z])/, '\1_\2').downcase}.rb"
       end
     end
   end

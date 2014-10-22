@@ -1,9 +1,10 @@
 require "spec_helper"
 
-describe Geocode::Static do
-  it "has the right configuration defaults" do
+describe "configuration" do
+  it "has the right defaults" do
     # these must match the values in the README
     config = Geocode::Static::Base.new.config
+
     expect(config.provider).to eq "Geocode::Static::DB_IP"
     expect(config.module).to   eq "Geocode"
     expect(config.file).to     eq "lib/geocode.rb"
@@ -13,17 +14,14 @@ describe Geocode::Static do
   end
 
 
-  describe "#configure" do
-    before do
-      Geocode::Static.configure do |config|
-        # config.provider = Geocode::Static::Provider::Test
-        config.module = "GeoRanges::Static"
-      end
+  it "can set new module" do
+    Geocode::Static.configure do |config|
+      # config.provider = Geocode::Static::Provider::Test
+      config.module = "GeoRanges::Quick"
     end
 
-    it "can receive new configuration" do
-      config = Geocode::Static::Base.new.config
-      expect(config.module).to eq "GeoRanges::Static"
-    end
+    config = Geocode::Static::Base.new.config
+    expect(config.module).to eq "GeoRanges::Quick"
+    expect(config.file).to eq "lib/geo_ranges/quick.rb"
   end
 end
