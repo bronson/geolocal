@@ -17,8 +17,11 @@ Gem::Specification.new do |spec|
   spec.test_files    = spec.files.grep(%r{^(test|spec|features)/})
   spec.require_paths = ["lib"]
 
+  # hm...  this is only required when running 'rake download'.
+  spec.add_runtime_dependency "nokogiri"
+
   spec.add_development_dependency "bundler"
   spec.add_development_dependency "rake"
   spec.add_development_dependency "rspec"
-  spec.add_development_dependency "nokogiri"
+  spec.add_development_dependency "webmock"
 end

@@ -85,6 +85,7 @@ Patches welcome.
 - [ ] Add support for cities
 - [ ] other sources for this data? [MainFacts](http://mainfacts.com/ip-address-space-addresses), [NirSoft](http://www.nirsoft.net/countryip/)
 - [ ] Add support for for-pay features like lat/lon and timezones?
+- [ ] Remove Nokogiri dependency?  It's only needed when updating ranges.  It's a shame to force an app to include it when we hardly even need it ourselves.
 
 
 ## Contributing

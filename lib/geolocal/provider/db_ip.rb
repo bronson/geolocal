@@ -1,6 +1,7 @@
 require 'csv'
-require 'open-uri'
+require 'net/http'
 require 'nokogiri'
+
 
 class Geolocal::Provider::DB_IP < Geolocal::Provider::Base
   START_URL = 'https://db-ip.com/db/download/country'
@@ -12,11 +13,9 @@ class Geolocal::Provider::DB_IP < Geolocal::Provider::Base
   end
 
   def download
-    href = nil
-    fetch(START_URL) do |io|
-      page = Nokogiri::HTML(io)
-      href = page.css('a.btn-primary').attr('href').to_s
-    end
+    page = Net::HTTP.get(URI START_URL)
+    doc = Nokogiri::HTML(page)
+    href = doc.css('a.btn-primary').attr('href').to_s
 
     puts "downloading #{href}"
   end
