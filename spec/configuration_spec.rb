@@ -6,7 +6,7 @@ describe "configuration" do
 
   it "has the right defaults" do
     # these need to match the description in the readme
-    expect(config.provider).to eq 'Geolocal::Provider::DB_IP'
+    expect(config.provider).to eq Geolocal::Provider::DB_IP
     expect(config.module).to   eq 'Geolocal'
     expect(config.file).to     eq 'lib/geolocal.rb'
     expect(config.tmpdir).to   eq 'tmp/geolocal'
@@ -31,12 +31,25 @@ describe "configuration" do
   end
 
 
-  it "can set the module configuration" do
-    Geolocal.configure do |g|
-      g.module = "GeoRangeFinder::QuickLook"
+  describe "module names" do
+    it "can handle typical module names" do
+      module_name = "GeoRangeFinderID::QuickLook"
+      Geolocal.configure do |g|
+        g.module = module_name
+      end
+
+      expect(config.module).to eq module_name
+      expect(config.file).to eq "lib/geo_range_finder_id/quick_look.rb"
     end
 
-    expect(config.module).to eq "GeoRangeFinder::QuickLook"
-    expect(config.file).to eq "lib/geo_range_finder/quick_look.rb"
+    it "can handle a pathological module name" do
+      module_name = "Geolocal::Provider::DB_IP"
+      Geolocal.configure do |g|
+        g.module = module_name
+      end
+
+      expect(config.module).to eq module_name
+      expect(config.file).to eq "lib/geolocal/provider/db_ip.rb"
+    end
   end
 end

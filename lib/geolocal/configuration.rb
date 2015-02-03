@@ -5,6 +5,7 @@ class Configuration
     # configuration defaults
     @provider = 'Geolocal::Provider::DB_IP'
     @module = 'Geolocal'
+    @file = nil  # default is computed
     @tmpdir = 'tmp/geolocal'
     @expires = Time.now + 86400*30
     @ipv6 = true
@@ -13,6 +14,14 @@ class Configuration
 
   # if not set, defaults to lib/module-name
   def file
-    @file || "lib/#{@module.gsub('::', '/').gsub(/([a-zA-Z])([A-Z])/, '\1_\2').downcase}.rb"
+    @file || self.class.module_file(@module)
+  end
+
+  def provider
+    @provider.split('::').reduce(Module, :const_get)
+  end
+
+  def self.module_file modname
+    "lib/#{modname.gsub('::', '/').gsub(/([a-z])([A-Z])/, '\1_\2').downcase}.rb"
   end
 end

@@ -62,7 +62,7 @@ require 'countries'
 
 eu_codes = Country.find_all_by_eu_member(true).map(&:first)
 
-Geolocal.configure do
+Geolocal.configure do |config|
   config.countries = { us: 'US', eu: eu_codes }
 end
 ```

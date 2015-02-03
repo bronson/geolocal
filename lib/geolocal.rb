@@ -1,5 +1,6 @@
 require 'geolocal/version'
 require 'geolocal/configuration'
+require 'geolocal/provider/base'
 
 
 module Geolocal
@@ -17,6 +18,15 @@ module Geolocal
     @configuration = nil
   end
 
-  module Provider
+  def self.provider
+    @provider ||= configuration.provider.new
+  end
+
+  def self.download
+    provider.download
+  end
+
+  def self.update
+    provider.update
   end
 end
