@@ -1,4 +1,4 @@
-require 'geocode/static'
+require 'geolocal'
 
 RSpec.configure do |config|
   # Run specs in random order to surface order dependencies. If you find an
@@ -8,6 +8,6 @@ RSpec.configure do |config|
   config.order = 'random'
 
   config.before :each do
-    Geocode::Static.reset_configuration
+    Geolocal.reset_configuration
   end
 end

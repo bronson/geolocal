@@ -1,8 +1,7 @@
-# Geocode::Static
+# Geolocal
 
-Allows IP address to geocoded with a single Ruby if statement.
-Checking whether an IP address is in a country or a continent is as easy
-as calling `addr.in_eu?`.  No network access, no context switches, no delay.
+Allows IP addresses to geocoded with a single Ruby if statement.
+No network access, no context switches, no delay.  Just one low-calorie local lookup.
 
 
 ## Installation
@@ -10,7 +9,7 @@ as calling `addr.in_eu?`.  No network access, no context switches, no delay.
 The usual method, add this line to your Gemfile:
 
 ```ruby
-gem 'geocode-static'
+gem 'geolocal'
 ```
 
 
@@ -20,17 +19,21 @@ First create a config file that describes the ranges you're interested in.
 Here's an example:
 
 ```ruby
-Geocode::Static.configure do
-  config.countries = { us: 'US' }
+Geolocal.configure do
+  config.countries = {
+    us: 'US',
+    central_america: %w[ BZ CR SV GT HN NI PA ]
+  }
 end
 ```
 
-Now run `rake geocode:update`.  It will download the geocoding data
+Now run `rake geolocal:update`.  It will download the geocoding data
 from the default provider (currently [db-ip](https://db-ip.com/)) and
 create `lib/Geocode.rb`.
 
 ```ruby
 Geocode.in_us?(request.remote_ip)
+Geocode.in_central_america?(IPAddr.new('200.16.66.0'))
 ```
 
 
@@ -40,45 +43,51 @@ Here are the most common config keys.  See the docs for the provider
 you're using for more.
 
 * **provider**: Where to download the geocoding data.  Default: DB_IP.
-* **module**: The name of the module to receive the `in_*` methods.  Default: 'Geocode'.
-* **file**: Path to the file to contain the generated module.  Default: `lib/#{module}.rb`.
-* **tmpdir**: the directory to contain intermediate files.  Default: `./tmp/geocode-static`
+* **module**: The name of the module to receive the `in_*` methods.  Default: 'Geolocal'.
+* **file**: Path to the file to contain the generated code.  Default: `lib/#{module}.rb`.
+* **tmpdir**: the directory to contain intermediate files.  They will require tens of megabytes
+  for countries, hundreds for cities).  Default: `./tmp/geolocal`
 * **expires**: the amount of time to consider downloaded data valid.  Default: 1.month
-* **countries**: the ISO-code of the countries to include in the lookup.
+* **countries**: the ISO-codes of the countries to include in the lookup.
+* **ipv6**: whether the ranges should support ipv6 addresses.
 
 
 ## Examples
 
-```ruby
-config.countries = { central_america: %w[ BZ CR SV GT HN NI PA ] }
-
-Geocode.in_central_america?(IPAddr.new('200.16.66.0'))
-```
-
-Here's a more complex example using the [Countries](https://github.com/hexorx/countries) gem
+This uses the [Countries](https://github.com/hexorx/countries) gem
 to discover if an address is in the European Union:
 
 ```ruby
 require 'countries'
 
-eu = Country.find_all_by_eu_member(true).map(&:first)
+eu_codes = Country.find_all_by_eu_member(true).map(&:first)
 
-Geocode::Static.configure do
-  config.countries = { us: 'US', eu: eu }
+Geolocal.configure do
+  config.countries = { us: 'US', eu: eu_codes }
 end
 ```
+
+Now you can call `Geolocal.in_eu?(ip)`.  If the European Union ever changes,
+run `bundle update countries` and then `rake geolocal`.
+
+## Providers
+
+This gem currently only supoports the [DP-IP](https://db-ip.com/about/) database.
+There are lots of other databases available and this gem is organized to support them.
+Patches welcome?
 
 
 ## TODO
 
-- link DB_IP in config section to online documentation.
-- write a command that takes the config on the command line and writes the result to stdout?
-- performance information?
-- is there a better name?  Geocode::Quick?  GeoQuick?  GeoRanges?
-- include a Rails generator for the config file?
-- other sources for this data? [MainFacts](http://mainfacts.com/ip-address-space-addresses), [NirSoft](http://www.nirsoft.net/countryip/)
+[ ] performance information?  benchmarks.  space saving by going ipv4-only?
+[ ] include a Rails generator for the config file?
+[ ] write a command that takes the config on the command line and writes the result to stdout?
+[ ] Add support for cities
+[ ] other sources for this data? [MainFacts](http://mainfacts.com/ip-address-space-addresses), [NirSoft](http://www.nirsoft.net/countryip/)
+[ ] Add support for for-pay features like lat/lon and timezones?
 
 
 ## Contributing
 
-To make this gem less imperfect, submit your issues and patches on GitHub.
+To make this gem less imperfect, please submit your issues and patches on
+[GitHub](https://github.com/bronson/geolocal/).

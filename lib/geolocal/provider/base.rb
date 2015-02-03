@@ -1,8 +1,8 @@
-class Geocode::Static::Base
+class Geolocal::Provider::Base
   attr_reader :config
 
   def initialize params={}
-    @config = Geocode::Static.configuration.dup
+    @config = Geolocal.configuration.dup
   end
 
   def generate
@@ -63,7 +63,7 @@ end
 
 require 'csv'
 
-class Geocode::Static::GeoIP < Geocode::Static::Base
+class Geolocal::Provider::GeoIP < GeoLocal::Provider::Base
   def download
     # go from here: http://db-ip.com/db/download/country
   end
