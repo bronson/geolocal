@@ -1,8 +1,9 @@
 class Geolocal::Provider::Base
-  attr_reader :config
-
   def initialize params={}
-    @config = Geolocal.configuration.dup
+  end
+
+  def config
+    @config ||= Geolocal.configuration.dup
   end
 
   def generate
@@ -63,14 +64,13 @@ end
 
 require 'csv'
 
-class Geolocal::Provider::GeoIP < GeoLocal::Provider::Base
+class Geolocal::Provider::DB_IP < GeoLocal::Provider::Base
   def download
     # go from here: http://db-ip.com/db/download/country
   end
 
   def process
     # why on earth doesn't CSV.new(STDIN).each work?  Slurping sux.
-
     CSV.new(STDIN.read, headers: false).each do |row|
       ranges.each do |name, countries|
         if countries.include?(row[2])
