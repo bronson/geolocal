@@ -1,5 +1,6 @@
 class Configuration
-  attr_accessor :provider, :module, :file, :tmpdir, :expires, :ipv6, :countries
+  OPTIONS = [ :provider, :module, :file, :tmpdir, :expires, :ipv6, :countries ]
+  attr_accessor(*OPTIONS)
 
   def initialize
     # configuration defaults
@@ -7,7 +8,7 @@ class Configuration
     @module = 'Geolocal'
     @file = nil  # default is computed
     @tmpdir = 'tmp/geolocal'
-    @expires = Time.now + 86400*30
+    @expires = 86400*30
     @ipv6 = true
     @countries = {}
   end
@@ -18,7 +19,13 @@ class Configuration
   end
 
   def provider
+    require './' + self.class.module_file(@provider)
     @provider.split('::').reduce(Module, :const_get)
+  end
+
+  def to_hash
+    # returned keys will always be symbols
+    OPTIONS.reduce({}) { |a,v| a.merge! v => instance_variable_get('@'+v.to_s) }
   end
 
   def self.module_file modname

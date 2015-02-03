@@ -10,7 +10,7 @@ describe "configuration" do
     expect(config.module).to   eq 'Geolocal'
     expect(config.file).to     eq 'lib/geolocal.rb'
     expect(config.tmpdir).to   eq 'tmp/geolocal'
-    expect(config.expires).to  be_within(60).of(Time.now + 86400*30)
+    expect(config.expires).to  eq 86400*30
     expect(config.ipv6).to     eq true
     expect(config.countries).to eq({})
   end
@@ -50,6 +50,21 @@ describe "configuration" do
 
       expect(config.module).to eq module_name
       expect(config.file).to eq "lib/geolocal/provider/db_ip.rb"
+    end
+  end
+
+
+  describe "to_hash" do
+    it "can do the conversion" do
+      expect(config.to_hash).to eq({
+        provider: 'Geolocal::Provider::DB_IP',
+        module: 'Geolocal',
+        file: nil,
+        tmpdir: 'tmp/geolocal',
+        expires: 2592000,
+        ipv6: true,
+        countries: {}
+      })
     end
   end
 end

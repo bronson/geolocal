@@ -1,14 +1,14 @@
-# require 'config/geolocal'
+require './config/geolocal'
 
 namespace :geolocal do
   desc "Downloads the most recent geocoding information"
   task :download do
-    Geolocal
+    Geolocal.download
   end
 
   desc "Updates your geocoding statements to use new data."
   task :update => :download do
-    puts "updated"
+    Geolocal.update
   end
 end
 
