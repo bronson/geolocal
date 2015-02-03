@@ -28,8 +28,8 @@ end
 ```
 
 Now run `rake geolocal:update`.  It will download the geocoding data
-from the default provider (currently [db-ip](https://db-ip.com/)) and
-create `lib/Geocode.rb`.
+from the default provider (see the [providers](#providers) section) and
+create `lib/geocode.rb`.
 
 ```ruby
 Geocode.in_us?(request.remote_ip)
@@ -72,19 +72,19 @@ run `bundle update countries` and then `rake geolocal`.
 
 ## Providers
 
-This gem currently only supoports the [DP-IP](https://db-ip.com/about/) database.
+This gem currently only supoports the [DB-IP](https://db-ip.com/about/) database.
 There are lots of other databases available and this gem is organized to support them.
-Patches welcome?
+Patches welcome.
 
 
 ## TODO
 
-[ ] performance information?  benchmarks.  space saving by going ipv4-only?
-[ ] include a Rails generator for the config file?
-[ ] write a command that takes the config on the command line and writes the result to stdout?
-[ ] Add support for cities
-[ ] other sources for this data? [MainFacts](http://mainfacts.com/ip-address-space-addresses), [NirSoft](http://www.nirsoft.net/countryip/)
-[ ] Add support for for-pay features like lat/lon and timezones?
+- [ ] performance information?  benchmarks.  space saving by going ipv4-only?
+- [ ] include a Rails generator for the config file?
+- [ ] write a command that takes the config on the command line and writes the result to stdout?
+- [ ] Add support for cities
+- [ ] other sources for this data? [MainFacts](http://mainfacts.com/ip-address-space-addresses), [NirSoft](http://www.nirsoft.net/countryip/)
+- [ ] Add support for for-pay features like lat/lon and timezones?
 
 
 ## Contributing
