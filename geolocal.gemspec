@@ -7,8 +7,8 @@ Gem::Specification.new do |spec|
   spec.version       = Geolocal::VERSION
   spec.authors       = ["Scott Bronson"]
   spec.email         = ["brons_geolo@rinspin.com"]
-  spec.summary       = "Generate a Ruby if statement to geocode IP addresses"
-  spec.description   = "Geocode an IP address with a single if statement.  No network access, no context switches, no waiting."
+  spec.summary       = "Generates plain Ruby if statements to geocode IP addresses"
+  spec.description   = "Geocode an IP address with a single if statement. No network access, no context switches, no waiting."
   spec.homepage      = "http://github.com/bronson/geolocal"
   spec.license       = "MIT"
 

@@ -81,6 +81,6 @@ class Geolocal::Provider::DB_IP < Geolocal::Provider::Base
       end
     end
 
-    status "  used #{match_count} of #{row_count} ranges in #{elapsed.round(2)} seconds\n"
+    status "  matched #{match_count} of #{row_count} ranges in #{elapsed.round(2)} seconds\n"
   end
 end

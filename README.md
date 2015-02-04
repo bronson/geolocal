@@ -29,11 +29,11 @@ end
 
 Now run `rake geolocal:update`.  It will download the geocoding data
 from the default provider (see the [providers](#providers) section) and
-create `lib/geocode.rb`.
+create `lib/geolocal.rb`.
 
 ```ruby
-Geocode.in_us?(request.remote_ip)
-Geocode.in_central_america?(IPAddr.new('200.16.66.0'))
+Geolocal.in_us?(request.remote_ip)
+Geolocal.in_central_america?(IPAddr.new('200.16.66.0'))
 ```
 
 

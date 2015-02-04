@@ -32,6 +32,8 @@ module Geolocal
         File.open(config[:file], 'w') do |file|
           output(file, results)
         end
+
+        status "done, result in #{config[:file]}\n"
       end
 
       def output file, results
@@ -46,9 +48,12 @@ module Geolocal
         end
         file.write "end\n\n"
 
+        status "  writing "
         results.each do |name, body|
+          status "#{name} "
           write_ranges file, modname, name, body
         end
+        status "\n"
       end
 
 
@@ -72,11 +77,9 @@ EOL
       end
 
       def write_ranges file, modname, name, body
-        status "  writing #{name}\n"
         file.write <<EOL
 #{modname}::#{name} = [
-  #{body}
-]
+#{body}]
 
 EOL
       end
