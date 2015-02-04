@@ -74,4 +74,18 @@ describe "configuration" do
       })
     end
   end
+
+
+  describe "module paths" do
+    it "includes the correct provider when running as a gem" do
+      expect(Kernel).to receive(:require).with('geolocal/provider/db_ip')
+      config.require_provider_file
+    end
+
+    it "includes the correct provider when running locally" do
+      expect(Kernel).to receive(:require).with('geolocal/provider/db_ip') { raise LoadError }
+      expect(Kernel).to receive(:require).with('./lib/geolocal/provider/db_ip.rb')
+      config.require_provider_file
+    end
+  end
 end

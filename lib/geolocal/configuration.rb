@@ -16,11 +16,21 @@ class Configuration
 
   # if not set, defaults to lib/module-name
   def file
-    @file || self.class.module_file(@module)
+    @file || "lib/#{module_file @module}.rb"
   end
 
-  def provider_module
-    require './' + self.class.module_file(@provider)
+  def require_provider_file
+    begin
+      # normal ruby/gem load path
+      Kernel.require module_file(@provider)
+    rescue LoadError
+      # used when running source code locally
+      Kernel.require "./lib/#{module_file(@provider)}.rb"
+    end
+  end
+
+  def load_provider
+    require_provider_file
     @provider.split('::').reduce(Module, :const_get)
   end
 
@@ -29,7 +39,7 @@ class Configuration
     OPTIONS.reduce({}) { |a,v| a.merge! v => self.send(v) }
   end
 
-  def self.module_file modname
-    "lib/#{modname.gsub('::', '/').gsub(/([a-z])([A-Z])/, '\1_\2').downcase}.rb"
+  def module_file modname
+    modname.gsub('::', '/').gsub(/([a-z])([A-Z])/, '\1_\2').downcase
   end
 end

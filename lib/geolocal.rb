@@ -19,7 +19,7 @@ module Geolocal
   end
 
   def self.provider
-    @provider ||= configuration.provider_module.new
+    @provider ||= configuration.load_provider.new
   end
 
   def self.download

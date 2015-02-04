@@ -77,6 +77,15 @@ There are lots of other databases available and this gem is organized to support
 Patches welcome.
 
 
+## Alternatives
+
+The [Geocoder gem](https://github.com/alexreisner/geocoder) offers
+[local database services](https://github.com/alexreisner/geocoder#ip-address-local-database-services).
+Geolocal is simpler, faster, and production ready, but the Geocoder gem offers more options and more providers.
+Geolocal also doesn't add any dependencies to your deploy, potentially making it easier to get working with oddball
+environments like Heroku.
+
+
 ## TODO
 
 - [ ] performance information?  benchmarks.  space saving by going ipv4-only?
