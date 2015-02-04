@@ -1,6 +1,7 @@
 require 'csv'
 require 'net/http'
 require 'fileutils'
+require 'zlib'
 require 'nokogiri'
 
 
@@ -12,8 +13,8 @@ class Geolocal::Provider::DB_IP < Geolocal::Provider::Base
   def status size, length
     @current_byte ||= 0
     @previous_print ||= 0
-
     @current_byte += size
+
     if length
       pct = @current_byte * 100 / length
       pct = (pct / 5) * 5
@@ -37,20 +38,20 @@ class Geolocal::Provider::DB_IP < Geolocal::Provider::Base
     $stdout.flush
   end
 
-  def download
-    # TODO: skip download if local file is new enough
-    # TODO: provide a FORCE argument to force download anyway
+  def csv_file
+    "#{config[:tmpdir]}/dbip-country.csv.gz"
+  end
 
+  def download_files
     page = Net::HTTP.get(URI START_URL)
     doc = Nokogiri::HTML(page)
     href = URI.parse doc.css('a.btn-primary').attr('href').to_s
 
     # stream result because it's large
     FileUtils.mkdir_p(config[:tmpdir])
-    outfile = "#{config[:tmpdir]}/dbip-country.csv.gz"
-    puts "downloading #{href} to #{outfile}"
+    puts "downloading #{href} to #{csv_file}"
     start = Time.now
-    File.open(outfile, 'w') do |file|
+    File.open(csv_file, 'w') do |file|
       Net::HTTP.new(href.host, href.port).request_get(href.path) do |response|
         total_length = response['Content-Length'].to_i
         print "  reading #{(total_length/1024.0/1024).round(1)} MB: "
@@ -68,18 +69,19 @@ class Geolocal::Provider::DB_IP < Geolocal::Provider::Base
          "#{(@current_byte/1024/elapsed).round(1)} KB/sec"
   end
 
-  def update
-    return 'done'
+  def read_ranges
+    countries = config[:countries]
 
     # why on earth doesn't CSV.new(STDIN).each work?  Slurping sux.
-    CSV.new(STDIN.read, headers: false).each do |row|
-      ranges.each do |name, countries|
-        if countries.include?(row[2])
-          yield IPAddr.new(row[0]), IPAddr.new(row[1])
+    File.open(csv_file, 'r') do |file|
+      gz = Zlib::GzipReader.new(file)
+      CSV.new(gz, headers: false).each do |row|
+        countries.each do |name, country_codes|
+          if country_codes.include?(row[2])
+            yield name, row[0], row[1]
+          end
         end
       end
     end
-
-    results
   end
 end
