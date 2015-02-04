@@ -11,7 +11,7 @@ class Geolocal::Provider::DB_IP < Geolocal::Provider::Base
 
   # TODO: refactor progress and download code into a mixin?
 
-  def status size, length
+  def update_download_status size, length
     @current_byte ||= 0
     @previous_print ||= 0
     @current_byte += size
@@ -22,21 +22,11 @@ class Geolocal::Provider::DB_IP < Geolocal::Provider::Base
 
       if pct != @previous_print
         @previous_print = pct
-        print pct.to_s + '% '
-        $stdout.flush
+        status pct.to_s + '% '
       end
     else
       # server didn't supply a length, display running byte count?
     end
-  end
-
-  def puts *args
-    Kernel.puts(*args)
-  end
-
-  def print *args
-    Kernel.print(*args)
-    $stdout.flush
   end
 
   def csv_file
@@ -50,36 +40,47 @@ class Geolocal::Provider::DB_IP < Geolocal::Provider::Base
 
     # stream result because it's large
     FileUtils.mkdir_p(config[:tmpdir])
-    puts "downloading #{href} to #{csv_file}"
-    start = Time.now
-    File.open(csv_file, 'w') do |file|
-      Net::HTTP.new(href.host, href.port).request_get(href.path) do |response|
-        total_length = response['Content-Length'].to_i
-        print "  reading #{(total_length/1024.0/1024).round(1)} MB: "
+    status "downloading #{href} to #{csv_file}\n"
 
-        response.read_body do |chunk|
-          file.write chunk
-          status(chunk.length, total_length)
-        end
-      end
-    end
-    stop = Time.now
-    elapsed = stop + 0.000001 - start # fudge to prevent division by zero
+    elapsed = time_block do
+      File.open(csv_file, 'w') do |file|
+        Net::HTTP.new(href.host, href.port).request_get(href.path) do |response|
+          total_length = response['Content-Length'].to_i
+          status "  reading #{(total_length/1024.0/1024).round(1)} MB: "
 
-    puts "\n  read #{@current_byte} bytes in #{elapsed.round(2)} seconds at " +
-         "#{(@current_byte/1024/elapsed).round(1)} KB/sec"
-  end
-
-  def read_ranges countries
-    File.open(csv_file, 'r') do |file|
-      gz = Zlib::GzipReader.new(file)
-      CSV.new(gz, headers: false).each do |row|
-        countries.each do |name, country_codes|
-          if country_codes.include?(row[2])
-            yield name, row[0], row[1]
+          response.read_body do |chunk|
+            file.write chunk
+            update_download_status(chunk.length, total_length)
           end
         end
       end
     end
+
+    status "\n  read #{@current_byte} bytes in #{elapsed.round(2)} seconds at " +
+         "#{(@current_byte/1024/elapsed).round(1)} KB/sec\n"
+  end
+
+  def read_ranges countries
+    status "computing ranges\n"
+
+    row_count = 0
+    match_count = 0
+
+    elapsed = time_block do
+      File.open(csv_file, 'r') do |file|
+        gz = Zlib::GzipReader.new(file)
+        CSV.new(gz, headers: false).each do |row|
+          row_count += 1
+          countries.each do |name, country_codes|
+            if country_codes.include?(row[2])
+              match_count += 1
+              yield name, row[0], row[1]
+            end
+          end
+        end
+      end
+    end
+
+    status "  used #{match_count} of #{row_count} ranges in #{elapsed.round(2)} seconds\n"
   end
 end

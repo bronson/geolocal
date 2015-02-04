@@ -33,10 +33,6 @@ describe Geolocal::Provider::DB_IP do
       stub_request(:get, "http://download.db-ip.com/free/dbip-country-2015-02.csv.gz").
         with(:headers => {'Accept'=>'*/*', 'User-Agent'=>'Ruby'}).
         to_return(:status => 200, :body => country_csv, :headers => {'Content-Length' => country_csv.length})
-
-      # disable progress information
-      allow(provider).to receive(:puts)
-      allow(provider).to receive(:print)
     end
 
     it 'can download the csv' do

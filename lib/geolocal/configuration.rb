@@ -1,5 +1,5 @@
 class Configuration
-  OPTIONS = [ :provider, :module, :file, :tmpdir, :expires, :ipv6, :countries ]
+  OPTIONS = [ :provider, :module, :file, :tmpdir, :expires, :ipv6, :quiet, :countries ]
   attr_accessor(*OPTIONS)
 
   def initialize
@@ -10,6 +10,7 @@ class Configuration
     @tmpdir = 'tmp/geolocal'
     @expires = nil    # provider chooses the most sensible
     @ipv6 = true
+    @quiet = false
     @countries = {}
   end
 

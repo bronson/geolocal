@@ -5,14 +5,20 @@ describe "configuration" do
   let(:config) { Geolocal.configuration }
 
   it "has the right defaults" do
+    # reset the configuration so we get the default configuration,
+    # not the test configuration that the spec_helper has set up.
+    Geolocal.reset_configuration
+    defaults = Geolocal.configuration
+
     # these need to match the description in the readme
-    expect(config.provider).to eq 'Geolocal::Provider::DB_IP'
-    expect(config.module).to   eq 'Geolocal'
-    expect(config.file).to     eq 'lib/geolocal.rb'
-    expect(config.tmpdir).to   eq 'tmp/geolocal'
-    expect(config.expires).to  eq nil
-    expect(config.ipv6).to     eq true
-    expect(config.countries).to eq({})
+    expect(defaults.provider).to eq 'Geolocal::Provider::DB_IP'
+    expect(defaults.module).to   eq 'Geolocal'
+    expect(defaults.file).to     eq 'lib/geolocal.rb'
+    expect(defaults.tmpdir).to   eq 'tmp/geolocal'
+    expect(defaults.expires).to  eq nil
+    expect(defaults.ipv6).to     eq true
+    expect(defaults.quiet).to    eq false
+    expect(defaults.countries).to eq({})
   end
 
 
@@ -63,6 +69,7 @@ describe "configuration" do
         tmpdir: 'tmp/geolocal',
         expires: nil,
         ipv6: true,
+        quiet: true,
         countries: {}
       })
     end

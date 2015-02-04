@@ -72,6 +72,7 @@ EOL
       end
 
       def write_ranges file, modname, name, body
+        status "  writing #{name}\n"
         file.write <<EOL
 #{modname}::#{name} = [
   #{body}
@@ -82,3 +83,27 @@ EOL
     end
   end
 end
+
+
+# random utilities
+module Geolocal
+  module Provider
+    class Base
+      # returns elapsed time of block in seconds
+      def time_block
+        start = Time.now
+        yield
+        stop = Time.now
+        stop - start + 0.0000001 # fudge to prevent division by zero
+      end
+
+      def status *args
+        unless config[:quiet]
+          Kernel.print(*args)
+          $stdout.flush unless args.last.end_with?("\n")
+        end
+      end
+    end
+  end
+end
+

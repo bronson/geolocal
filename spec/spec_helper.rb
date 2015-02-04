@@ -8,5 +8,8 @@ RSpec.configure do |config|
 
   config.before :each do
     Geolocal.reset_configuration
+    Geolocal.configure do |geoconf|
+      geoconf.quiet = true
+    end
   end
 end

@@ -83,9 +83,9 @@ Patches welcome.
 - [ ] include a Rails generator for the config file?
 - [ ] write a command that takes the config on the command line and writes the result to stdout?
 - [ ] Add support for cities
+- [ ] replace Nokogiri dependency with a single regex?  Shame to force that dependency on all clients.
 - [ ] other sources for this data? [MainFacts](http://mainfacts.com/ip-address-space-addresses), [NirSoft](http://www.nirsoft.net/countryip/)
 - [ ] Add support for for-pay features like lat/lon and timezones?
-- [ ] Remove Nokogiri dependency?  It's only needed when updating ranges.  It's a shame to force an app to include it when we hardly even need it ourselves.
 
 
 ## Contributing
