@@ -43,7 +43,7 @@ class Geolocal::Provider::DB_IP < Geolocal::Provider::Base
     status "downloading #{href} to #{csv_file}\n"
 
     elapsed = time_block do
-      File.open(csv_file, 'w') do |file|
+      File.open(csv_file, 'wb') do |file|
         Net::HTTP.new(href.host, href.port).request_get(href.path) do |response|
           total_length = response['Content-Length'].to_i
           status "  reading #{(total_length/1024.0/1024).round(1)} MB: "
