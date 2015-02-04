@@ -6,11 +6,11 @@ describe "configuration" do
 
   it "has the right defaults" do
     # these need to match the description in the readme
-    expect(config.provider).to eq Geolocal::Provider::DB_IP
+    expect(config.provider).to eq 'Geolocal::Provider::DB_IP'
     expect(config.module).to   eq 'Geolocal'
     expect(config.file).to     eq 'lib/geolocal.rb'
     expect(config.tmpdir).to   eq 'tmp/geolocal'
-    expect(config.expires).to  eq 86400*30
+    expect(config.expires).to  eq nil
     expect(config.ipv6).to     eq true
     expect(config.countries).to eq({})
   end
@@ -59,9 +59,9 @@ describe "configuration" do
       expect(config.to_hash).to eq({
         provider: 'Geolocal::Provider::DB_IP',
         module: 'Geolocal',
-        file: nil,
+        file: 'lib/geolocal.rb',
         tmpdir: 'tmp/geolocal',
-        expires: 2592000,
+        expires: nil,
         ipv6: true,
         countries: {}
       })

@@ -6,9 +6,9 @@ class Configuration
     # configuration defaults
     @provider = 'Geolocal::Provider::DB_IP'
     @module = 'Geolocal'
-    @file = nil  # default is computed
+    @file = nil       # default is computed
     @tmpdir = 'tmp/geolocal'
-    @expires = 86400*30
+    @expires = nil    # provider chooses the most sensible
     @ipv6 = true
     @countries = {}
   end
@@ -18,14 +18,14 @@ class Configuration
     @file || self.class.module_file(@module)
   end
 
-  def provider
+  def provider_module
     require './' + self.class.module_file(@provider)
     @provider.split('::').reduce(Module, :const_get)
   end
 
   def to_hash
     # returned keys will always be symbols
-    OPTIONS.reduce({}) { |a,v| a.merge! v => instance_variable_get('@'+v.to_s) }
+    OPTIONS.reduce({}) { |a,v| a.merge! v => self.send(v) }
   end
 
   def self.module_file modname
