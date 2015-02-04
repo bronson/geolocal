@@ -61,19 +61,19 @@ describe Geolocal::Provider::DB_IP do
 module Geolocal
   def self.in_us? addr
     num = addr.to_i
-    us.bsearch { |range| num > range.max ? 1 : num < range.min ? -1 : 0 }
+    US.bsearch { |range| num > range.max ? 1 : num < range.min ? -1 : 0 }
   end
   def self.in_au? addr
     num = addr.to_i
-    au.bsearch { |range| num > range.max ? 1 : num < range.min ? -1 : 0 }
+    AU.bsearch { |range| num > range.max ? 1 : num < range.min ? -1 : 0 }
   end
 end
 
-Geolocal::us = [
+Geolocal::US = [
 0..16777215,
 ]
 
-Geolocal::au = [
+Geolocal::AU = [
 16777216..16777471,
 ]
 

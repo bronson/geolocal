@@ -71,14 +71,14 @@ EOL
         file.write <<EOL
   def self.in_#{name}? addr
     num = addr.to_i
-    #{name}.bsearch { |range| num > range.max ? 1 : num < range.min ? -1 : 0 }
+    #{name.upcase}.bsearch { |range| num > range.max ? 1 : num < range.min ? -1 : 0 }
   end
 EOL
       end
 
       def write_ranges file, modname, name, body
         file.write <<EOL
-#{modname}::#{name} = [
+#{modname}::#{name.upcase} = [
 #{body}]
 
 EOL
