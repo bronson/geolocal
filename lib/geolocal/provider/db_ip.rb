@@ -2,6 +2,7 @@ require 'csv'
 require 'net/http'
 require 'fileutils'
 require 'zlib'
+
 require 'nokogiri'
 
 
@@ -69,10 +70,7 @@ class Geolocal::Provider::DB_IP < Geolocal::Provider::Base
          "#{(@current_byte/1024/elapsed).round(1)} KB/sec"
   end
 
-  def read_ranges
-    countries = config[:countries]
-
-    # why on earth doesn't CSV.new(STDIN).each work?  Slurping sux.
+  def read_ranges countries
     File.open(csv_file, 'r') do |file|
       gz = Zlib::GzipReader.new(file)
       CSV.new(gz, headers: false).each do |row|
