@@ -59,7 +59,7 @@ module Geolocal
         return false unless File.exist?(file)
         diff = Time.now - File.mtime(file)
         if diff < expiry
-          status "using #{file} since it's only #{diff} seconds old\n"
+          status "using #{file} since it's #{diff.round} seconds old\n"
           return true
         end
       end

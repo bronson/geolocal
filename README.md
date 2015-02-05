@@ -70,8 +70,8 @@ Geolocal.configure do |config|
 end
 ```
 
-Now you can call `Geolocal.in_eu?(ip)`.  If the European Union ever changes,
-run `bundle update countries` and then `rake geolocal`.
+Now you can call `Geolocal.in_eu?(ip)`.  If the European Union membership ever changes,
+run `bundle update countries` and then `rake geolocal` to bring your app up to date.
 
 ## Providers
 
@@ -93,9 +93,7 @@ environments like Heroku.
 
 - [ ] performance information?  benchmarks.  space saving by going ipv4-only?
 - [ ] include a Rails generator for the config file?
-- [ ] write a command that takes the config on the command line and writes the result to stdout?
 - [ ] Add support for cities
-- [ ] replace Nokogiri dependency with a single regex?  Shame to force that dependency on all clients.
 - [ ] other sources for this data? [MainFacts](http://mainfacts.com/ip-address-space-addresses), [NirSoft](http://www.nirsoft.net/countryip/)
 - [ ] Add support for for-pay features like lat/lon and timezones?
 
