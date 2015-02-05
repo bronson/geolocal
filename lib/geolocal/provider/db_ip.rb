@@ -34,6 +34,9 @@ class Geolocal::Provider::DB_IP < Geolocal::Provider::Base
   end
 
   def download_files
+    # they update the file every month but no idea which day they upload it
+    return if up_to_date?(csv_file, 86400)
+
     page = Net::HTTP.get(URI START_URL)
     doc = Nokogiri::HTML(page)
     href = URI.parse doc.css('a.btn-primary').attr('href').to_s

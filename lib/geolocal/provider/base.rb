@@ -13,8 +13,6 @@ module Geolocal
       end
 
       def download
-        # TODO: skip download if local files are new enough
-        # TODO: provide a FORCE argument to force download anyway
         download_files
       end
 
@@ -55,6 +53,15 @@ module Geolocal
         end
 
         status "done, result in #{config[:file]}\n"
+      end
+
+      def up_to_date?(file, expiry)
+        return false unless File.exist?(file)
+        diff = Time.now - File.mtime(file)
+        if diff < expiry
+          status "using #{file} since it's only #{diff} seconds old\n"
+          return true
+        end
       end
 
       def output file, results
