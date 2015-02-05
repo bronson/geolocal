@@ -29,6 +29,7 @@ module Geolocal
         results = countries.keys.reduce({}) { |a, k|
           a.merge! k.upcase+'v4' => '' if ipv4
           a.merge! k.upcase+'v6' => '' if ipv4
+          a
         }
 
         read_ranges(countries) do |name,lostr,histr|
@@ -62,7 +63,9 @@ module Geolocal
         write_header file, modname
 
         config[:countries].keys.each do |name|
-          write_method file, name
+          v4mod = config[:ipv4] ? name.to_s.upcase + 'v4' : 'nil'
+          v6mod = config[:ipv6] ? name.to_s.upcase + 'v6' : 'nil'
+          write_method file, name, v4mod, v6mod
         end
         file.write "end\n\n"
 
@@ -86,20 +89,21 @@ module #{modname}
     family = address.family unless family
     num = address.to_i
     case family
-      when Socket::AF_INET  then module = v4module
-      when Socket::AF_INET6 then module = v6module
+      when Socket::AF_INET  then mod = v4module
+      when Socket::AF_INET6 then mod = v6module
       else raise "Unknown family \#{family} for address \#{address}"
     end
-    module.bsearch { |range| num > range.max ? 1 : num < range.min ? -1 : 0 }
+    raise "ipv\#{family == 2 ? 4 : 6} was not compiled in" unless mod
+    mod.bsearch { |range| num > range.max ? 1 : num < range.min ? -1 : 0 }
   end
 
 EOL
       end
 
-      def write_method file, name
+      def write_method file, name, v4mod, v6mod
         file.write <<EOL
   def self.in_#{name}? address, family=nil
-    search address, family, #{name.upcase}v4, #{name.upcase}v6
+    search address, family, #{v4mod}, #{v6mod}
   end
 
 EOL

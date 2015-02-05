@@ -62,11 +62,12 @@ module Geolocal
     family = address.family unless family
     num = address.to_i
     case family
-      when Socket::AF_INET  then module = v4module
-      when Socket::AF_INET6 then module = v6module
+      when Socket::AF_INET  then mod = v4module
+      when Socket::AF_INET6 then mod = v6module
       else raise "Unknown family \#{family} for address \#{address}"
     end
-    module.bsearch { |range| num > range.max ? 1 : num < range.min ? -1 : 0 }
+    raise "ipv\#{family == 2 ? 4 : 6} was not compiled in" unless mod
+    mod.bsearch { |range| num > range.max ? 1 : num < range.min ? -1 : 0 }
   end
 
   def self.in_us? address, family=nil
