@@ -36,6 +36,9 @@ Geolocal.in_us?(request.remote_ip)
 Geolocal.in_central_america?(IPAddr.new('200.16.66.0'))
 ```
 
+You can pass a string (`in_us? "10.1.2.3"`),
+[IPAddr](http://www.ruby-doc.org/stdlib-2.2.0/libdoc/ipaddr/rdoc/IPAddr.html) object,
+or integer/family combo (`in_us? 167838211, Socket::AF_INET`).
 
 ## Config
 

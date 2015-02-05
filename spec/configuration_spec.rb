@@ -16,6 +16,7 @@ describe "configuration" do
     expect(defaults.file).to     eq 'lib/geolocal.rb'
     expect(defaults.tmpdir).to   eq 'tmp/geolocal'
     expect(defaults.expires).to  eq nil
+    expect(defaults.ipv4).to     eq true
     expect(defaults.ipv6).to     eq true
     expect(defaults.quiet).to    eq false
     expect(defaults.countries).to eq({})
@@ -68,6 +69,7 @@ describe "configuration" do
         file: 'lib/geolocal.rb',
         tmpdir: 'tmp/geolocal',
         expires: nil,
+        ipv4: true,
         ipv6: true,
         quiet: true,
         countries: {}
