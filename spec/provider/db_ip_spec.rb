@@ -36,6 +36,10 @@ describe Geolocal::Provider::DB_IP do
     end
 
     it 'can download the csv' do
+      Geolocal.configure do |config|
+        config.tmpdir = 'tmp/geolocal-test'
+      end
+
       # wow!!  can't do this in an around hook because it gets the ordering completely wrong.
       # since around hooks wrap ALL before hooks, they end up using the previous test's config.
       if File.exist?(provider.csv_file)
