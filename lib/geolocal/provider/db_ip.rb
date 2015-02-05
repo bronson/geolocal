@@ -39,12 +39,12 @@ class Geolocal::Provider::DB_IP < Geolocal::Provider::Base
 
     # if we used Nokogiri: (we don't since we don't want to force the dependency)
     # doc = Nokogiri::HTML(page)
-    # href = URI.parse doc.css('a.btn-primary').attr('href').to_s
+    # href = URI doc.css('a.btn-primary').attr('href').to_s
 
     elem = page.match(/<a\b[^>]*class=['"][^'"]*btn-primary[^>]*>/) or
       raise "no <a class='btn-primary'> element found in #{START_URL}"
     attr = elem.to_s.match(/href=['"]([^'"]+)['"]/) or raise "no href found in #{elem}"
-    href = URI.parse attr[1]
+    href = URI attr[1]
 
     # stream result because it's large
     FileUtils.mkdir_p(config[:tmpdir])

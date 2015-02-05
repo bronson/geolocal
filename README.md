@@ -91,8 +91,8 @@ environments like Heroku.
 
 ## TODO
 
-- [ ] performance information?  benchmarks.  space saving by going ipv4-only?
 - [ ] include a Rails generator for the config file?
+- [ ] performance information?  benchmarks.  space saving by going ipv4-only?
 - [ ] Add support for cities
 - [ ] other sources for this data? [MainFacts](http://mainfacts.com/ip-address-space-addresses), [NirSoft](http://www.nirsoft.net/countryip/)
       Also maybe allow providers to accept their own options?
