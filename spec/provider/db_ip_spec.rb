@@ -67,7 +67,7 @@ module Geolocal
       else raise "Unknown family \#{family} for address \#{address}"
     end
     raise "ipv\#{family == 2 ? 4 : 6} was not compiled in" unless mod
-    mod.bsearch { |range| num > range.max ? 1 : num < range.min ? -1 : 0 }
+    true if mod.bsearch { |range| num > range.max ? 1 : num < range.min ? -1 : 0 }
   end
 
   def self.in_us? address, family=nil

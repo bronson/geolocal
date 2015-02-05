@@ -28,7 +28,7 @@ module Geolocal
 
         results = countries.keys.reduce({}) { |a, k|
           a.merge! k.upcase+'v4' => '' if ipv4
-          a.merge! k.upcase+'v6' => '' if ipv4
+          a.merge! k.upcase+'v6' => '' if ipv6
           a
         }
 
@@ -94,7 +94,7 @@ module #{modname}
       else raise "Unknown family \#{family} for address \#{address}"
     end
     raise "ipv\#{family == 2 ? 4 : 6} was not compiled in" unless mod
-    mod.bsearch { |range| num > range.max ? 1 : num < range.min ? -1 : 0 }
+    true if mod.bsearch { |range| num > range.max ? 1 : num < range.min ? -1 : 0 }
   end
 
 EOL
