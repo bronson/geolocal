@@ -16,37 +16,38 @@ module Geolocal
         download_files
       end
 
+      def add_to_results results, name, lostr, histr
+        loaddr = IPAddr.new(lostr)
+        hiaddr = IPAddr.new(histr)
+        lofam = loaddr.family
+        hifam = hiaddr.family
+        raise "#{lostr} is family #{lofam} but #{histr} is #{hifam}" if lofam != hifam
+
+        if lofam == Socket::AF_INET
+          namefam = name + 'v4' if config[:ipv4]
+        elsif lofam == Socket::AF_INET6
+          namefam = name + 'v6' if config[:ipv6]
+        else
+          raise "unknown family #{lofam} for #{lostr}"
+        end
+
+        if namefam
+          results[namefam] << "#{loaddr.to_i}..#{hiaddr.to_i},\n"
+        end
+      end
+
       def update
         countries = config[:countries].reduce({}) { |a, (k, v)|
           a.merge! k.to_s.upcase => Array(v).map(&:upcase).to_set
         }
 
-        ipv4 = Socket::AF_INET  if config[:ipv4]
-        ipv6 = Socket::AF_INET6 if config[:ipv6]
-
         results = countries.keys.reduce({}) { |a, k|
-          a.merge! k.upcase+'v4' => '' if ipv4
-          a.merge! k.upcase+'v6' => '' if ipv6
+          a.merge! k.upcase+'v4' => '' if config[:ipv4]
+          a.merge! k.upcase+'v6' => '' if config[:ipv6]
           a
         }
 
-        read_ranges(countries) do |name,lostr,histr|
-          loaddr = IPAddr.new(lostr)
-          hiaddr = IPAddr.new(histr)
-          lofam = loaddr.family
-          hifam = hiaddr.family
-          raise "#{lostr} is family #{lofam} but #{histr} is #{hifam}" if lofam != hifam
-
-          if lofam == ipv4
-            namefam = name+'v4'
-          elsif lofam == ipv6
-            namefam = name+'v6'
-          else
-            raise "unknown family #{lofam} for #{lostr}"
-          end
-
-          results[namefam] << "#{loaddr.to_i}..#{hiaddr.to_i},\n"
-        end
+        read_ranges(countries) { |*args| add_to_results(results, *args) }
 
         File.open(config[:file], 'w') do |file|
           output(file, results)
