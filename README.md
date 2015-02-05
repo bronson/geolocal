@@ -36,21 +36,21 @@ Geolocal.in_us?(request.remote_ip)
 Geolocal.in_central_america?(IPAddr.new('200.16.66.0'))
 ```
 
-You can pass a string (`in_us? "10.1.2.3"`),
-[IPAddr](http://www.ruby-doc.org/stdlib-2.2.0/libdoc/ipaddr/rdoc/IPAddr.html) object,
-or integer/family combo (`in_us? 167838211, Socket::AF_INET`).
+You can pass:
+* a string: `Geolocal.in_us?("10.1.2.3")`
+* an [IPAddr](http://www.ruby-doc.org/stdlib-2.2.0/libdoc/ipaddr/rdoc/IPAddr.html) object:
+  `Geolocal.in_eu?(IPAddr.new('2.16.54.0'))`
+* an integer/family combo: `Geolocal.in_us?(167838211, Socket::AF_INET)`
 
 ## Config
 
-Here are the most common config keys.  See the docs for the provider
-you're using for more.
+Here are the supported configuration options:
 
 * **provider**: Where to download the geocoding data.  Default: DB_IP.
 * **module**: The name of the module to receive the `in_*` methods.  Default: 'Geolocal'.
 * **file**: Path to the file to contain the generated code.  Default: `lib/#{module}.rb`.
 * **tmpdir**: the directory to contain intermediate files.  They will require tens of megabytes
   for countries, hundreds for cities).  Default: `./tmp/geolocal`
-* **expires**: the amount of time to consider downloaded data valid.  Default: 1.month
 * **countries**: the ISO-codes of the countries to include in the lookup.
 * **ipv6**: whether the ranges should support ipv6 addresses.
 
@@ -95,6 +95,7 @@ environments like Heroku.
 - [ ] include a Rails generator for the config file?
 - [ ] Add support for cities
 - [ ] other sources for this data? [MainFacts](http://mainfacts.com/ip-address-space-addresses), [NirSoft](http://www.nirsoft.net/countryip/)
+      Also maybe allow providers to accept their own options?
 - [ ] Add support for for-pay features like lat/lon and timezones?
 
 
