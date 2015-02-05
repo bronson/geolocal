@@ -73,12 +73,31 @@ module Geolocal
     raise "ipv\#{family == 2 ? 4 : 6} was not compiled in" unless mod
     true if mod.bsearch { |range| num > range.max ? 1 : num < range.min ? -1 : 0 }
   end
+
 EOL
     }
 
+    def run_test example_body
+      outfile = 'tmp/geolocal.rb'
+      if File.exist?(outfile)
+        File.delete(outfile)
+      end
+
+      Geolocal.configure do |config|
+        config.tmpdir = 'spec/data'
+        config.file = outfile
+        config.countries = { us: 'US', au: 'AU' }
+        yield config
+      end
+
+      provider.update
+      expect(File.read outfile).to eq example_header + example_body
+      File.delete(outfile)
+    end
+
+
     it 'can generate countries from a csv' do
       example_output = <<EOL
-#{example_header}
   def self.in_us? address, family=nil
     search address, family, USv4, USv6
   end
@@ -107,24 +126,13 @@ Geolocal::AUv6 = [
 
 EOL
 
-      outfile = 'tmp/geolocal.rb'
-      if File.exist?(outfile)
-        File.delete(outfile)
+      run_test example_output do |config|
+        # no need to change config
       end
-
-      Geolocal.configure do |config|
-        config.tmpdir = 'spec/data'
-        config.file = outfile
-        config.countries = { us: 'US', au: 'AU' }
-      end
-      provider.update
-      expect(File.read outfile).to eq example_output
-      File.delete(outfile)
     end
 
     it 'can generate countries from a csv when ipv6 is turned off' do
       example_output = <<EOL
-#{example_header}
   def self.in_us? address, family=nil
     search address, family, USv4, nil
   end
@@ -144,26 +152,15 @@ Geolocal::AUv4 = [
 ]
 
 EOL
-      outfile = 'tmp/geolocal.rb'
-      if File.exist?(outfile)
-        File.delete(outfile)
-      end
 
-      Geolocal.configure do |config|
-        config.tmpdir = 'spec/data'
-        config.file = outfile
-        config.countries = { us: 'US', au: 'AU' }
+      run_test example_output do |config|
         config.ipv6 = false
       end
-      provider.update
-      expect(File.read outfile).to eq example_output
-      File.delete(outfile)
     end
 
 
     it 'can generate countries from a csv when ipv4 is turned off' do
       example_output = <<EOL
-#{example_header}
   def self.in_us? address, family=nil
     search address, family, nil, USv6
   end
@@ -183,20 +180,10 @@ Geolocal::AUv6 = [
 ]
 
 EOL
-      outfile = 'tmp/geolocal.rb'
-      if File.exist?(outfile)
-        File.delete(outfile)
-      end
 
-      Geolocal.configure do |config|
-        config.tmpdir = 'spec/data'
-        config.file = outfile
-        config.countries = { us: 'US', au: 'AU' }
+      run_test example_output do |config|
         config.ipv4 = false
       end
-      provider.update
-      expect(File.read outfile).to eq example_output
-      File.delete(outfile)
     end
   end
 end
