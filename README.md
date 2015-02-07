@@ -12,6 +12,8 @@ The usual method, add this line to your Gemfile:
 gem 'geolocal'
 ```
 
+If you're using Rails, run `rails generate geolocal` to create an example config file.
+
 
 ## Usage
 
@@ -41,6 +43,7 @@ You can pass:
 * an [IPAddr](http://www.ruby-doc.org/stdlib-2.2.0/libdoc/ipaddr/rdoc/IPAddr.html) object:
   `Geolocal.in_eu?(IPAddr.new('2.16.54.0'))`
 * an integer/family combo: `Geolocal.in_us?(167838211, Socket::AF_INET)`
+
 
 ## Config
 
@@ -91,7 +94,6 @@ environments like Heroku.
 
 ## TODO
 
-- [ ] include a Rails generator for the config file?
 - [ ] performance information?  benchmarks.  space saving by going ipv4-only?
 - [ ] Add support for cities
 - [ ] other sources for this data? [MainFacts](http://mainfacts.com/ip-address-space-addresses), [NirSoft](http://www.nirsoft.net/countryip/)

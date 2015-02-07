@@ -1,0 +1,8 @@
+Description:
+    Creates a US-centric config file for Geolocal
+
+Example:
+    rails generate geolocal
+
+    This will create:
+        config/geolocal.rb
