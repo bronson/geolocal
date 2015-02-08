@@ -1,4 +1,5 @@
 require 'ipaddr'
+require 'fileutils'
 
 
 module Geolocal
@@ -62,6 +63,7 @@ module Geolocal
 
         read_ranges(countries) { |*args| add_to_results(results, *args) }
 
+        FileUtils.mkdir_p File.dirname(config[:file])
         File.open(config[:file], 'w') do |file|
           output(file, results)
         end

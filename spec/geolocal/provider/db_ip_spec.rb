@@ -78,7 +78,8 @@ EOL
     }
 
     def run_test example_body
-      outfile = 'tmp/geolocal.rb'
+      outdir = "tmp/test-#{$$}"
+      outfile = "#{outdir}/geolocal.rb"
       if File.exist?(outfile)
         File.delete(outfile)
       end
@@ -93,6 +94,7 @@ EOL
       provider.update
       expect(File.read outfile).to eq example_header + example_body
       File.delete(outfile)
+      Dir.rmdir(outdir)
     end
 
 
