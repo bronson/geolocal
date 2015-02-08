@@ -1,3 +1,10 @@
+# to generate selectors for each continent:
+#
+#     rake geolocal config=contrib/continents
+#
+# Now you can call Geolocal.in_africa?, in_antarcitca?, in_asia?, etc.
+
+
 require 'geolocal'
 require 'countries'
 

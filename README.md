@@ -2,7 +2,8 @@
 
 Geocode IP addresses with a single Ruby if statement.
 No network access, no context switches, no delay.  Just one low-calorie lookup:
-`Geolocal.in_spain?(request.remote_ip)`
+`Geolocal.in_spain?(request.remote_ip)`.  500,000 individual lookups
+per second is fairly typical performance.
 
 
 ## Installation
@@ -53,6 +54,7 @@ You can pass:
 * an integer/family combo: `Geolocal.in_asia?(167838211, Socket::AF_INET)`
 
 It returns true if the IP address is in the area, false if not.
+
 
 ## Config
 
@@ -107,6 +109,19 @@ If European Union membership ever changes, just run `bundle update countries`
 and `rake geolocal` to bring your app back up to date.
 
 
+## Performance
+
+It depends on how large an area you're looking up.  `Geolocal.in_antarctica?` will
+take less than half the time of `Geolocal.in_asia?`.  Generally, you can
+expect to do better than a million lookups every two seconds.
+
+To see for yourself, run the continents benchmark:
+
+```sh
+rake geolocal config=contrib/continents.rb
+ruby contrib/benchmark-continents.rb
+```
+
 
 ## Alternatives
 
@@ -119,10 +134,11 @@ with oddball environments like Heroku.
 
 ## TODO
 
-- [ ] performance information / benchmarks?
 - [ ] Add support for cities
 - [ ] other sources for this data? [MainFacts](http://mainfacts.com/ip-address-space-addresses), [NirSoft](http://www.nirsoft.net/countryip/)
       Also maybe allow providers to accept their own options?
+- [ ] release 1.0!
+- [ ] Detect nesting?  Putting in_eu?, in_europe?, and in_france? generates a lot of redundant overlap.
 - [ ] Add support for for-pay features like lat/lon and timezones?
 
 
