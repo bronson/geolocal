@@ -1,8 +1,8 @@
 # Geolocal
 
 Allows IP addresses to geocoded with a single Ruby if statement.
-No network access, no context switches, no delay.  Just one low-calorie local lookup.
-
+No network access, no context switches, no delay.  Just one low-calorie lookup:
+`Geolocal.in_spain?(request.remote_ip)`
 
 ## Installation
 
@@ -25,6 +25,7 @@ Here's an example:
 Geolocal.configure do
   config.countries = {
     us: 'US',
+    spain: 'ES',
     central_america: %w[ BZ CR SV GT HN NI PA ]
   }
 end
@@ -36,12 +37,13 @@ creates the desired methods:
 
 ```ruby
 Geolocal.in_us?(request.remote_ip)
-Geolocal.in_central_america?(200.16.66.0)
+Geolocal.in_spain?('2a05:af06::')  # optional IPv6 support
+Geolocal.in_central_america?('200.16.66.0')
 ```
 
 #### The in\_*area*? method
 
-`rake geolocal:update` generates these methods.  You can pass:
+The `rake geolocal:update` task generates the Ruby file defining these methods.  You can pass:
 * a string: `Geolocal.in_us?("10.1.2.3")`
 * an [IPAddr](http://www.ruby-doc.org/stdlib-2.2.0/libdoc/ipaddr/rdoc/IPAddr.html) object:
   `Geolocal.in_eu?(IPAddr.new('2.16.54.0'))`
@@ -53,7 +55,7 @@ It returns true if the IP address is in the area, false if not.
 
 Here are the supported configuration options:
 
-* **provider**: Where to download the geocoding data.  Default: DB_IP.
+* **provider**: Where to download the geocoding data.  See [Providers](#providers) below.  Default: DB_IP.
 * **module**: The name of the module to receive the `in_*` methods.  Default: 'Geolocal'.
 * **file**: Path to the file to contain the generated code.  Default: `lib/#{module}.rb`.
 * **tmpdir**: the directory to contain intermediate files.  They will require tens of megabytes
@@ -96,8 +98,8 @@ and `rake geolocal` to bring your app back up to date.
 
 ## Providers
 
-This gem currently only supoports the [DB-IP](https://db-ip.com/about/) database.
-There are lots of other databases available and this gem is organized to support them.
+This gem currently only supoports the [DB-IP](https://db-ip.com/about/) Countries database.
+There are lots of other databases available and this gem is organized to support them one day.
 Patches welcome.
 
 

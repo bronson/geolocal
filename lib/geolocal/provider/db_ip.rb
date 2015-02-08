@@ -68,6 +68,14 @@ class Geolocal::Provider::DB_IP < Geolocal::Provider::Base
          "#{(@current_byte/1024/elapsed).round(1)} KB/sec\n"
   end
 
+  # a bit of debugging code to print all non-matched country codes.  should be deleted one day.
+  def check_country_codes(countries, row)
+    @known_codes ||= countries.reduce(Set.new) { |a,(_,v)| a.merge v; a }
+    unless @known_codes.include?(row[2])
+      puts "#{row[2]}: #{row[0]}..#{row[1]}"
+    end
+  end
+
   def read_ranges countries
     status "computing ranges\n"
 
@@ -84,6 +92,7 @@ class Geolocal::Provider::DB_IP < Geolocal::Provider::Base
               match_count += 1
               yield name, row[0], row[1]
             end
+            # check_country_codes(countries, row)
           end
         end
       end
