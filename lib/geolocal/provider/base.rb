@@ -21,19 +21,28 @@ module Geolocal
         hiaddr = IPAddr.new(histr)
         lofam = loaddr.family
         hifam = hiaddr.family
-        raise "#{lostr} is family #{lofam} but #{histr} is #{hifam}" if lofam != hifam
+        if lofam != hifam
+          raise "#{lostr} and #{histr} must be in the same address family"
+        end
+
+        loval = loaddr.to_i
+        hival = hiaddr.to_i
+        if loval > hival
+          raise "range supplied in the wrong order: #{lostr}..#{histr}"
+        end
 
         if lofam == Socket::AF_INET
           namefam = name + 'v4' if config[:ipv4]
         elsif lofam == Socket::AF_INET6
           namefam = name + 'v6' if config[:ipv6]
         else
-          raise "unknown family #{lofam} for #{lostr}"
+          raise "unknown address family #{lofam} for #{lostr}"
         end
 
         if namefam
-          results[namefam] << "#{loaddr.to_i}..#{hiaddr.to_i},\n"
+          results[namefam] << "#{loval}..#{hival},\n"
         end
+        namefam
       end
 
       def update

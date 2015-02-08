@@ -12,6 +12,40 @@ describe Geolocal::Provider::Base do
               "42540569291614257367232052214305390592..42540570559264857595461453711008595967,\n"
   } }
 
+
+  describe '#add_to_results' do
+    it 'adds to results' do
+      result = { 'USv4'=>[] }
+      expect(
+        provider.add_to_results(result, 'US', '192.168.1.3', '192.168.1.4')
+      ).to eq 'USv4'
+      expect(result).to eq({ "USv4" => ["3232235779..3232235780,\n"] })
+
+      expect(
+        provider.add_to_results({'USv6'=>[]}, 'US', '2001:400::', '2001:404::')
+      ).to eq 'USv6'
+    end
+
+    it 'complains if given a bad range' do
+      expect {
+        provider.add_to_results({}, 'US', '192.168.1.5', '192.168.1.4')
+      }.to raise_error(/wrong order: 192.168.1.5\.\.192.168.1.4/)
+    end
+
+    it 'complains if given an illegal address' do
+      expect {
+        provider.add_to_results({}, 'US', 'dog', 'cat')
+      }.to raise_error(/invalid address/)
+    end
+
+    it 'complains if given non-matching addresses' do
+      expect {
+        provider.add_to_results({}, 'US', '192.168.1.5', '2001:400::')
+      }.to raise_error(/must be in the same address family/)
+    end
+  end
+
+
   before do
     Geolocal.configure do |config|
       config.countries = { 'us': 'US' }
