@@ -21,7 +21,7 @@ describe Geolocal::Provider::Base do
       expect(
         provider.add_to_results(result, 'US', '2001:400::', '2001:404::')
       ).to eq 'USv6'
-      # wow, rspec bug?  this causes rspec to enter an infinite loop
+      # wow, rspec bug?  this expectation causes rspec to enter an infinite loop
       # expect(result).to eq({ "USv6" => ["3232235779..3232235780,\n"] })
       expect(result).to eq({ "USv6" =>
         [42540569291614257367232052214305390592..42540569608526907424289402588481191936] })
@@ -43,6 +43,31 @@ describe Geolocal::Provider::Base do
       expect {
         provider.add_to_results({}, 'US', '192.168.1.5', '2001:400::')
       }.to raise_error(/must be in the same address family/)
+    end
+  end
+
+
+  describe '#coalesce_ranges' do
+    it 'can coalesce some ranges' do
+      expect(provider.coalesce_ranges([1..2, 3..4])).to eq [1..4]
+      expect(provider.coalesce_ranges([8..9, 6..7])).to eq [6..9]
+      expect(provider.coalesce_ranges([1..2, 4..5])).to eq [1..2, 4..5]
+      expect(provider.coalesce_ranges([7..9, 0..2])).to eq [0..2, 7..9]
+      expect(provider.coalesce_ranges([1..1, 2..2])).to eq [1..2]
+      expect(provider.coalesce_ranges([3..3, 1..1])).to eq [1..1, 3..3]
+      expect(provider.coalesce_ranges([1..2, 3..4, 2..6, 6..8, 8..9])).to eq [1..9]
+    end
+
+    it 'can coalesce some oddball cases' do
+      expect(provider.coalesce_ranges([])).to eq []
+      expect(provider.coalesce_ranges([1..1])).to eq [1..1]
+    end
+
+    it 'can coalesce some questionable ranges' do
+      expect(provider.coalesce_ranges([1..2, 2..4])).to eq [1..4]
+      expect(provider.coalesce_ranges([1..8, 2..9])).to eq [1..9]
+      expect(provider.coalesce_ranges([2..4, 1..2])).to eq [1..4]
+      expect(provider.coalesce_ranges([2..9, 1..8])).to eq [1..9]
     end
   end
 

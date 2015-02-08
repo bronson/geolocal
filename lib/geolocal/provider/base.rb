@@ -87,11 +87,33 @@ module Geolocal
         file.write "end\n\n"
 
         status "  writing "
-        results.each do |name, body|
-          status "#{name} "
-          write_ranges file, modname, name, body
+        results.each do |name, ranges|
+          coalesced = coalesce_ranges(ranges)
+          status "#{name}-#{ranges.length - coalesced.length} "
+          write_ranges file, modname, name, coalesced
         end
         status "\n"
+      end
+
+
+      def coalesce_ranges ranges
+        ranges = ranges.sort_by { |r| r.min }
+
+        uniques = []
+        lastr = ranges.shift
+        uniques << lastr if lastr
+
+        ranges.each do |thisr|
+          if lastr.last >= thisr.first - 1
+            lastr = lastr.first..[thisr.last, lastr.last].max
+            uniques[-1] = lastr
+          else
+            lastr = thisr
+            uniques << lastr
+          end
+        end
+
+        uniques
       end
 
 
@@ -126,10 +148,10 @@ EOL
 EOL
       end
 
-      def write_ranges file, modname, name, body
+      def write_ranges file, modname, name, ranges
         file.write <<EOL
 #{modname}::#{name} = [
-#{body.join(",\n")}
+#{ranges.join(",\n")}
 ]
 
 EOL
