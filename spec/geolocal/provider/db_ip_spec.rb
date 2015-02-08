@@ -98,23 +98,15 @@ EOL
 
     it 'can generate countries from a csv' do
       example_output = <<EOL
-  def self.in_us? address, family=nil
-    search address, family, USv4, USv6
-  end
-
   def self.in_au? address, family=nil
     search address, family, AUv4, AUv6
   end
 
+  def self.in_us? address, family=nil
+    search address, family, USv4, USv6
+  end
+
 end
-
-Geolocal::USv4 = [
-0..16777215
-]
-
-Geolocal::USv6 = [
-55854460156896106951106838613354086400..55854460790721407065221539361705689087
-]
 
 Geolocal::AUv4 = [
 16777216..16777471
@@ -122,6 +114,14 @@ Geolocal::AUv4 = [
 
 Geolocal::AUv6 = [
 55832834671488781931518904937387917312..55832834671488781949965649011097468927
+]
+
+Geolocal::USv4 = [
+0..16777215
+]
+
+Geolocal::USv6 = [
+55854460156896106951106838613354086400..55854460790721407065221539361705689087
 ]
 
 EOL
@@ -133,22 +133,22 @@ EOL
 
     it 'can generate countries from a csv when ipv6 is turned off' do
       example_output = <<EOL
-  def self.in_us? address, family=nil
-    search address, family, USv4, nil
-  end
-
   def self.in_au? address, family=nil
     search address, family, AUv4, nil
   end
 
-end
+  def self.in_us? address, family=nil
+    search address, family, USv4, nil
+  end
 
-Geolocal::USv4 = [
-0..16777215
-]
+end
 
 Geolocal::AUv4 = [
 16777216..16777471
+]
+
+Geolocal::USv4 = [
+0..16777215
 ]
 
 EOL
@@ -161,22 +161,22 @@ EOL
 
     it 'can generate countries from a csv when ipv4 is turned off' do
       example_output = <<EOL
-  def self.in_us? address, family=nil
-    search address, family, nil, USv6
-  end
-
   def self.in_au? address, family=nil
     search address, family, nil, AUv6
   end
 
-end
+  def self.in_us? address, family=nil
+    search address, family, nil, USv6
+  end
 
-Geolocal::USv6 = [
-55854460156896106951106838613354086400..55854460790721407065221539361705689087
-]
+end
 
 Geolocal::AUv6 = [
 55832834671488781931518904937387917312..55832834671488781949965649011097468927
+]
+
+Geolocal::USv6 = [
+55854460156896106951106838613354086400..55854460790721407065221539361705689087
 ]
 
 EOL

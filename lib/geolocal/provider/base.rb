@@ -32,9 +32,9 @@ module Geolocal
         end
 
         if lofam == Socket::AF_INET
-          namefam = name + 'v4' if config[:ipv4]
+          namefam = name.upcase + 'v4' if config[:ipv4]
         elsif lofam == Socket::AF_INET6
-          namefam = name + 'v6' if config[:ipv6]
+          namefam = name.upcase + 'v6' if config[:ipv6]
         else
           raise "unknown address family #{lofam} for #{lostr}"
         end
@@ -45,11 +45,15 @@ module Geolocal
         namefam
       end
 
-      def update
-        countries = config[:countries].reduce({}) { |a, (k, v)|
-          a.merge! k.to_s.upcase => Array(v).map(&:upcase).to_set
+      def countries
+        @countries ||= config[:countries].sort_by { |k, v| k }.reduce({}) { |a, (k, v)|
+          k = k.to_s.gsub(/[ -]/, '_')
+          raise "invalid identifier: '#{k}'" if k =~ /^[^A-Za-z_]|[^A-Za-z0-9_]|^\s*$/
+          a.merge! k.to_s.downcase => Array(v).map { |c| c.to_s.upcase }.sort.to_set
         }
+      end
 
+      def update
         results = countries.keys.reduce({}) { |a, k|
           a.merge! k.upcase+'v4' => [] if config[:ipv4]
           a.merge! k.upcase+'v6' => [] if config[:ipv6]
@@ -79,7 +83,7 @@ module Geolocal
 
         write_header file, modname
 
-        config[:countries].keys.each do |name|
+        countries.keys.each do |name|
           v4mod = config[:ipv4] ? name.to_s.upcase + 'v4' : 'nil'
           v6mod = config[:ipv6] ? name.to_s.upcase + 'v6' : 'nil'
           write_method file, name, v4mod, v6mod

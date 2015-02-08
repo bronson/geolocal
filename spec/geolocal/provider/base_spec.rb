@@ -47,6 +47,33 @@ describe Geolocal::Provider::Base do
   end
 
 
+  describe '#countries' do
+    it 'preprocesses the countries' do
+      Geolocal.configure do |config|
+        config.countries = { ua: :UA, na: ['MX', 'CA', :US] }
+      end
+
+      expect(provider.countries).to eq({ 'na' => Set['CA', 'MX', 'US'], 'ua' => Set['UA'] })
+    end
+
+    it 'preprocesses countries with an odd name' do
+      Geolocal.configure do |config|
+        config.countries = { 'U s-a': 'US', 'Mex': 'MX' }
+      end
+
+      expect(provider.countries).to eq({ 'mex' => Set['MX'], 'u_s_a' => Set['US'] })
+    end
+
+    it 'refuses invalid identifiers' do
+      Geolocal.configure do |config|
+        config.countries = { '1nation': 'US' }
+      end
+
+      expect { provider.countries }.to raise_error(/invalid identifier/)
+    end
+  end
+
+
   describe '#coalesce_ranges' do
     it 'can coalesce some ranges' do
       expect(provider.coalesce_ranges([1..2, 3..4])).to eq [1..4]
@@ -81,7 +108,7 @@ describe Geolocal::Provider::Base do
 
     before do
       Geolocal.configure do |config|
-        config.countries = { 'us': 'US' }
+        config.countries = { 'US': 'US' }
       end
     end
 
