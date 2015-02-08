@@ -4,6 +4,7 @@ Geocode IP addresses with a single Ruby if statement.
 No network access, no context switches, no delay.  Just one low-calorie lookup:
 `Geolocal.in_spain?(request.remote_ip)`
 
+
 ## Installation
 
 Add this line to your Gemfile:
@@ -22,7 +23,7 @@ The config file describes the ranges you're interested in.
 Here's an example:
 
 ```ruby
-Geolocal.configure do
+Geolocal.configure do |config|
   config.countries = {
     us: 'US',
     spain: 'ES',
