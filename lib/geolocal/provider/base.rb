@@ -40,7 +40,7 @@ module Geolocal
         end
 
         if namefam
-          results[namefam] << "#{loval}..#{hival},\n"
+          results[namefam] << (loaddr.to_i..hiaddr.to_i)
         end
         namefam
       end
@@ -51,8 +51,8 @@ module Geolocal
         }
 
         results = countries.keys.reduce({}) { |a, k|
-          a.merge! k.upcase+'v4' => '' if config[:ipv4]
-          a.merge! k.upcase+'v6' => '' if config[:ipv6]
+          a.merge! k.upcase+'v4' => [] if config[:ipv4]
+          a.merge! k.upcase+'v6' => [] if config[:ipv6]
           a
         }
 
@@ -129,7 +129,8 @@ EOL
       def write_ranges file, modname, name, body
         file.write <<EOL
 #{modname}::#{name} = [
-#{body}]
+#{body.join(",\n")}
+]
 
 EOL
       end
