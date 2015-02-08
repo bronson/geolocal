@@ -1,5 +1,1 @@
-require 'geolocal'
-
-Geolocal.configure do |config|
-  config.countries = { us: 'US' }
-end
+../lib/generators/geolocal/templates/geolocal.rb
