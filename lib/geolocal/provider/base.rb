@@ -47,7 +47,7 @@ module Geolocal
       end
 
       def countries
-        @countries ||= config[:countries].sort_by { |k, v| k }.reduce({}) { |a, (k, v)|
+        @countries ||= config[:countries].sort_by { |k, v| k.to_s }.reduce({}) { |a, (k, v)|
           k = k.to_s.gsub(/[ -]/, '_')
           raise "invalid identifier: '#{k}'" if k =~ /^[^A-Za-z_]|[^A-Za-z0-9_]|^\s*$/
           a.merge! k.to_s.downcase => Array(v).map { |c| c.to_s.upcase }.sort.to_set

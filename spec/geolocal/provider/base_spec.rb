@@ -50,7 +50,7 @@ describe Geolocal::Provider::Base do
   describe '#countries' do
     it 'preprocesses the countries' do
       Geolocal.configure do |config|
-        config.countries = { ua: :UA, na: ['MX', 'CA', :US] }
+        config.countries = { ua: :UA, Na: ['MX', 'CA', :US] }
       end
 
       expect(provider.countries).to eq({ 'na' => Set['CA', 'MX', 'US'], 'ua' => Set['UA'] })
@@ -58,7 +58,7 @@ describe Geolocal::Provider::Base do
 
     it 'preprocesses countries with an odd name' do
       Geolocal.configure do |config|
-        config.countries = { 'U s-a': 'US', 'Mex': 'MX' }
+        config.countries = { 'U s-a' => 'US', mex: 'MX' }
       end
 
       expect(provider.countries).to eq({ 'mex' => Set['MX'], 'u_s_a' => Set['US'] })

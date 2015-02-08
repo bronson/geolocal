@@ -69,6 +69,7 @@ class Geolocal::Provider::DB_IP < Geolocal::Provider::Base
   end
 
   # a bit of debugging code to print all non-matched country codes.  should be deleted one day.
+  # The Countries gem doesn't know about these country codes from the csv: CS FX UK YU TP and blank
   def check_country_codes(countries, row)
     @known_codes ||= countries.reduce(Set.new) { |a,(_,v)| a.merge v; a }
     unless @known_codes.include?(row[2])
