@@ -1,6 +1,6 @@
 # Geolocal
 
-Allows IP addresses to geocoded with a single Ruby if statement.
+Geocode IP addresses with a single Ruby if statement.
 No network access, no context switches, no delay.  Just one low-calorie lookup:
 `Geolocal.in_spain?(request.remote_ip)`
 
