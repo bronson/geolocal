@@ -44,7 +44,9 @@ Geolocal.in_central_america?('200.16.66.0')
 
 #### The in\_*area*? method
 
-The `rake geolocal:update` task generates the Ruby file defining these methods.  You can pass:
+The `rake geolocal:update` task generates a Ruby file defining the methods you asked for.
+You can pass:
+
 * a string: `Geolocal.in_us?("10.1.2.3")`
 * an [IPAddr](http://www.ruby-doc.org/stdlib-2.2.0/libdoc/ipaddr/rdoc/IPAddr.html) object:
   `Geolocal.in_eu?(IPAddr.new('2.16.54.0'))`
@@ -63,6 +65,13 @@ Here are the supported configuration options:
   for countries, hundreds for cities).  Default: `./tmp/geolocal`
 * **countries**: the ISO-codes of the countries to include in the lookup.
 * **ipv6**: whether the ranges should support ipv6 addresses.
+
+
+## Providers
+
+This gem currently only supoports the [DB-IP](https://db-ip.com/about/) Countries database.
+There are lots of other databases available and this gem is organized to support them one day.
+Patches welcome.
 
 
 ## Examples
@@ -92,25 +101,20 @@ Geolocal.configure do |config|
 end
 ```
 
+Now you can use it in your app: `cookie_warning if Geolocal.in_eu?(request.remote_ip)`
+
 If European Union membership ever changes, just run `bundle update countries`
 and `rake geolocal` to bring your app back up to date.
 
-
-
-## Providers
-
-This gem currently only supoports the [DB-IP](https://db-ip.com/about/) Countries database.
-There are lots of other databases available and this gem is organized to support them one day.
-Patches welcome.
 
 
 ## Alternatives
 
 The [Geocoder gem](https://github.com/alexreisner/geocoder) offers
 [local database services](https://github.com/alexreisner/geocoder#ip-address-local-database-services).
-Geolocal is simpler, faster, and production ready, but the Geocoder gem offers more options and more providers.
-Geolocal also doesn't add any dependencies to your deploy, potentially making it easier to get working with oddball
-environments like Heroku.
+It offers more options and more providers than Geolocal, but it's a little more complex and not as fast.
+Geolocal also doesn't add any dependencies to your deploy, potentially making it easier to get working
+with oddball environments like Heroku.
 
 
 ## TODO
