@@ -127,7 +127,7 @@ module Geolocal
 
 module #{modname}
 
-  def self.search address, family=nil, v4module, v6module
+  def self.search address, family, v4module, v6module
     address = IPAddr.new(address) if address.is_a?(String)
     family = address.family unless family
     num = address.to_i
