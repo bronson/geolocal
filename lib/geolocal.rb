@@ -1,4 +1,3 @@
-require 'geolocal/version'
 require 'geolocal/configuration'
 
 
@@ -19,13 +18,5 @@ module Geolocal
 
   def self.provider
     @provider ||= configuration.load_provider.new
-  end
-
-  def self.download
-    provider.download
-  end
-
-  def self.update
-    provider.update
   end
 end

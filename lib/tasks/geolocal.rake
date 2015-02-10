@@ -13,12 +13,12 @@ require './'+config
 namespace :geolocal do
   desc "Downloads the most recent geocoding information"
   task :download do
-    Geolocal.download
+    Geolocal.provider.download
   end
 
   desc "Updates your geocoding statements to use new data."
   task :update => :download do
-    Geolocal.update
+    Geolocal.provider.update
   end
 end
 
