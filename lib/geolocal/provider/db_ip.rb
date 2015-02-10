@@ -1,3 +1,5 @@
+require 'geolocal/provider/base'
+
 require 'csv'
 require 'net/http'
 require 'fileutils'

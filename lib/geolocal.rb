@@ -1,6 +1,5 @@
 require 'geolocal/version'
 require 'geolocal/configuration'
-require 'geolocal/provider/base'
 
 
 module Geolocal
