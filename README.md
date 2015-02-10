@@ -1,9 +1,10 @@
 # Geolocal
 
 Geocode IP addresses with a single Ruby if statement.
-No network access, no context switches, no delay.  Just one low-calorie lookup:
-`Geolocal.in_spain?(request.remote_ip)`.  500,000 individual lookups
-per second is fairly typical performance.
+No network access, no context switches, no delay,
+just one low-calorie lookup like `Geolocal.in_spain?(request.remote_ip)`.
+
+500,000 individual lookups per second is fairly typical performance.
 
 
 ## Installation
@@ -20,11 +21,12 @@ gem 'geolocal'
 If you're using Rails, run `rails generate geolocal` to create the configuration file.
 Otherwise, crib from [config/geolocal.rb](https://github.com/bronson/geolocal/tree/master/config/geolocal.rb).
 
-The config file describes the ranges you're interested in.
+The configuration file describes the ranges you're interested in.
 Here's an example:
 
 ```ruby
 require 'geolocal/configuration'
+
 Geolocal.configure do |config|
   config.countries = {
     us: 'US',
@@ -40,6 +42,7 @@ creates the desired methods:
 
 ```ruby
 require 'geolocal'
+
 Geolocal.in_us?(request.remote_ip)
 Geolocal.in_spain?('2a05:af06::')  # optional IPv6 support
 Geolocal.in_central_america?('200.16.66.0')
@@ -127,21 +130,26 @@ ruby contrib/benchmark-continents.rb
 
 ## Alternatives
 
-The [Geocoder gem](https://github.com/alexreisner/geocoder) offers
+The [Geocoder gem](https://github.com/alexreisner/geocoder) also offers
 [local database services](https://github.com/alexreisner/geocoder#ip-address-local-database-services).
 It offers more options and more providers than Geolocal, but it's a little more complex and not as fast.
-Geolocal also doesn't add any dependencies to your deploy, potentially making it easier to get working
+Geolocal also doesn't add any dependencies to your deploy, potentially making it easier to get it working
 with oddball environments like Heroku.
 
 
-## TODO
+## Roadmap
 
-- [ ] Add support for cities
-- [ ] other sources for this data? [MainFacts](http://mainfacts.com/ip-address-space-addresses), [NirSoft](http://www.nirsoft.net/countryip/)
-      Also maybe allow providers to accept their own options?
-- [ ] release 1.0!
-- [ ] Detect nesting?  Putting in_eu?, in_europe?, and in_france? generates a lot of redundant overlap.
-- [ ] Add support for for-pay features like lat/lon and timezones?
+* Add support for cities
+* other sources for this data? [MainFacts](http://mainfacts.com/ip-address-space-addresses), [NirSoft](http://www.nirsoft.net/countryip/)
+  Also maybe allow providers to accept their own options?
+* release 1.0!
+* Detect nesting?  Putting in_eu?, in_europe?, and in_france? in your config generates a lot of redundant overlap.
+* Add support for for-pay features like lat/lon and timezones?
+
+
+## License
+
+Pain-free MIT.  Downloaded data is copyrighted by the provider you downloaded it from.
 
 
 ## Contributing
