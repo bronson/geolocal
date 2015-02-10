@@ -1,6 +1,4 @@
 module Geolocal
-  require 'geolocal/railtie' if defined? Rails
-
   class Configuration
     OPTIONS = [ :provider, :module, :file, :tmpdir, :ipv4, :ipv6, :quiet, :countries ]
     attr_accessor(*OPTIONS)
