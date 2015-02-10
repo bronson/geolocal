@@ -7,18 +7,18 @@ config='config/geolocal'
 #     `rake geolocal config=contrib/continents`
 config=ENV['config'] if ENV['config']
 puts "loading geolocal configuration from #{config}"
-require './'+config
+require './' + config
 
 
 namespace :geolocal do
   desc "Downloads the most recent geocoding information"
   task :download do
-    Geolocal.provider.download
+    Geolocal.configuration.load_provider.new
   end
 
   desc "Updates your geocoding statements to use new data."
   task :update => :download do
-    Geolocal.provider.update
+    Geolocal.configuration.load_provider.update
   end
 end
 

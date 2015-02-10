@@ -24,6 +24,7 @@ The config file describes the ranges you're interested in.
 Here's an example:
 
 ```ruby
+require 'geolocal/configuration'
 Geolocal.configure do |config|
   config.countries = {
     us: 'US',
@@ -38,6 +39,7 @@ from the default provider (see the [providers](#providers) section) and
 creates the desired methods:
 
 ```ruby
+require 'geolocal'
 Geolocal.in_us?(request.remote_ip)
 Geolocal.in_spain?('2a05:af06::')  # optional IPv6 support
 Geolocal.in_central_america?('200.16.66.0')
@@ -134,7 +136,6 @@ with oddball environments like Heroku.
 
 ## TODO
 
-- [ ] Solve the ambiguity between lib/geolocal.rb (the gem) and lib/geolocal.rb (the generated code)
 - [ ] Add support for cities
 - [ ] other sources for this data? [MainFacts](http://mainfacts.com/ip-address-space-addresses), [NirSoft](http://www.nirsoft.net/countryip/)
       Also maybe allow providers to accept their own options?

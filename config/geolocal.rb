@@ -1,4 +1,4 @@
-require 'geolocal'
+require 'geolocal/configuration'
 
 Geolocal.configure do |config|
   # This example creates a Geolocal.in_us?(addr) command:
