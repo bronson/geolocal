@@ -15,6 +15,11 @@ Add this line to your Gemfile:
 gem 'geolocal'
 ```
 
+And this line to your Rakefile:
+
+```ruby
+require 'geolocal/tasks'
+```
 
 ## Usage
 
