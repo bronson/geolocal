@@ -8,7 +8,6 @@ namespace :geolocal do
     # but you can specify the config file on the command line:
     #     `rake geolocal config=contrib/continents`
     config=ENV['config'] if ENV['config']
-    puts "loading geolocal configuration from #{config}"
     require './' + config
 
     Geolocal.configuration.load_provider.new
