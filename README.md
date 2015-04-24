@@ -2,7 +2,11 @@
 
 Geocode IP addresses with a single Ruby if statement.
 No network access, no context switches, no delay,
-just one low-calorie lookup like `Geolocal.in_spain?(request.remote_ip)`.
+just one low-calorie lookup.
+
+```ruby
+Geolocal.in_spain?(request.remote_ip)
+```
 
 500,000 individual lookups per second is fairly typical performance.
 
@@ -21,13 +25,15 @@ And this line to your Rakefile:
 require 'geolocal/tasks'
 ```
 
+
 ## Usage
 
 If you're using Rails, run `rails generate geolocal` to create the configuration file.
 Otherwise, crib from [config/geolocal.rb](https://github.com/bronson/geolocal/tree/master/config/geolocal.rb).
 
 The configuration file describes the ranges you're interested in.
-Here's an example:
+Here's an example that creates three queries: `in_us?`, `in_spain?`,
+and `in_central_america?`:
 
 ```ruby
 require 'geolocal/configuration'
@@ -43,7 +49,7 @@ end
 
 Now run `rake geolocal:update`.  Geolocal downloads the geocoding data
 from the default provider (see the [providers](#providers) section) and
-creates the desired methods:
+generates the methods:
 
 ```ruby
 require 'geolocal'
@@ -55,7 +61,7 @@ Geolocal.in_central_america?('200.16.66.0')
 
 #### The in\_*area*? method
 
-The `rake geolocal:update` task generates a Ruby file defining the methods you asked for.
+Call this routine to discover whether an address is inside or outside the given area.
 You can pass:
 
 * a string: `Geolocal.in_us?("10.1.2.3")`
@@ -64,6 +70,10 @@ You can pass:
 * an integer/family combo: `Geolocal.in_asia?(167838211, Socket::AF_INET)`
 
 It returns true if the IP address is in the area, false if not.
+
+It works by generating a static array of ranges.  `in_area?` binary
+searches the appropriate array to determine whether the desired
+address is contained or not.
 
 
 ## Config
@@ -77,6 +87,11 @@ Here are the supported configuration options:
   for countries, hundreds for cities).  Default: `./tmp/geolocal`
 * **countries**: the ISO-codes of the countries to include in the lookup.
 * **ipv6**: whether the ranges should support ipv6 addresses.
+* **ipv4**: whether the ranges should support ipv4 addresses.
+
+If you don't compile in an address family, but you pass Geolocal an address in that
+family (say, you omit ipv6 but call `Geolocal.in_us?('::1')`), then Geolocal will
+return false.  It will always assume the address is outside your ranges.
 
 
 ## Providers
@@ -144,6 +159,9 @@ with oddball environments like Heroku.
 
 ## Roadmap
 
+Geolocal is running on multiple production sites.  It has proven itself to be fast and stable.
+Therefore, we may or may not ever get around to implementing these.  Just depends on interest.
+
 * Add support for cities
 * other sources for this data? [MainFacts](http://mainfacts.com/ip-address-space-addresses), [NirSoft](http://www.nirsoft.net/countryip/)
   Also maybe allow providers to accept their own options?
@@ -154,7 +172,7 @@ with oddball environments like Heroku.
 
 ## License
 
-Pain-free MIT.  Downloaded data is copyrighted by the provider you downloaded it from.
+MIT.  Any downloaded data is copyrighted by the provider you downloaded it from.
 
 
 ## Contributing

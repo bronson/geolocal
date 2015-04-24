@@ -140,7 +140,7 @@ module #{modname}
       when Socket::AF_INET6 then mod = v6module
       else raise "Unknown family \#{family} for address \#{address}"
     end
-    raise "ipv\#{family == 2 ? 4 : 6} was not compiled in" unless mod
+    return false unless mod # if we didn't compile in ipv6, assume nothing's local
     true if mod.bsearch { |range| num > range.max ? 1 : num < range.min ? -1 : 0 }
   end
 

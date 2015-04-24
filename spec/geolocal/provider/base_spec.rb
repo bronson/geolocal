@@ -146,7 +146,7 @@ describe Geolocal::Provider::Base do
       expect(io.string).not_to include '34605568..34606591'
 
       eval io.string
-      expect{ Geolocal_v6.in_us? '2.16.13.255' }.to raise_error(/ipv4 was not compiled in/)
+      expect( Geolocal_v6.in_us? '2.16.13.255' ).to eq false
       expect( Geolocal_v6.in_us? '2001:400::'  ).to eq true
     end
 
@@ -162,7 +162,7 @@ describe Geolocal::Provider::Base do
       expect(io.string).not_to include '0..42540528726795050063891204319802818559'
 
       eval io.string
-      expect{ Geolocal_v4.in_us? '2001:400::'  }.to raise_error(/ipv6 was not compiled in/)
+      expect( Geolocal_v4.in_us? '2001:400::'  ).to eq false
       expect( Geolocal_v4.in_us? '2.16.13.255' ).to eq true
     end
 
