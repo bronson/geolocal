@@ -28,10 +28,12 @@ require 'geolocal/tasks'
 
 ## Usage
 
-If you're using Rails, run `rails generate geolocal` to create the configuration file.
+Geolocal creates routines that return true or false depending on whether a particular IP address is within an area.
+A config file describes the areas you're interested in.
+
+If you're using Rails, run `rails generate geolocal` to create the config file.
 Otherwise, crib from [config/geolocal.rb](https://github.com/bronson/geolocal/tree/master/config/geolocal.rb).
 
-The configuration file describes the ranges you're interested in.
 Here's an example that creates three queries: `in_us?`, `in_spain?`,
 and `in_central_america?`:
 
@@ -109,7 +111,7 @@ Run them like this:
 ```sh
 git clone https://github.com/bronson/geolocal
 cd geolocal
-rake geolocal config=contrib/continents.rb
+rake geolocal config=contrib/continents
 ```
 
 
@@ -121,7 +123,7 @@ to create a `Geolocal.in_eu?(ip_addr)` method:
 ```ruby
 require 'countries'
 
-eu_codes = Country.find_all_by_eu_member(true).map(&:first)
+eu_codes = ISO3166::Country.find_all_by_eu_member(true).map(&:first)
 
 Geolocal.configure do |config|
   config.countries = { us: 'US', eu: eu_codes }
