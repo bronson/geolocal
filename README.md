@@ -114,6 +114,15 @@ cd geolocal
 rake geolocal config=contrib/continents
 ```
 
+Now look at the `tmp/geolocal.rb` file.  Beware, it's big!
+
+Here's an example of using it from a command.  The `-Itmp` argument ensures `require` will
+load `tmp/geolocal.rb`, then we just look up the IP address `8.8.8.8`.
+
+```bash
+ruby -Itmp -e 'require "geolocal"; puts Geolocal.in_north_america?("8.8.8.8") ? "yes!" : "nope"'
+```
+
 
 #### in_eu?
 
@@ -145,7 +154,7 @@ expect to do better than a million lookups every two seconds.
 To see for yourself, run the continents benchmark:
 
 ```sh
-rake geolocal config=contrib/continents.rb
+rake geolocal config=contrib/continents
 ruby contrib/benchmark-continents.rb
 ```
 
