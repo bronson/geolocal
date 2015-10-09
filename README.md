@@ -175,19 +175,17 @@ with oddball environments like Heroku.
 ## Roadmap
 
 Geolocal is running on multiple production sites.  It has proven itself to be fast and stable.
-Therefore, we may or may not ever get around to implementing these.  Just depends on interest.
+These features would be nice but may never be implemented.  Just depends on demand.
 
+* Detect nesting?  A config file with in_eu? and in_france? would generate a fair amount of redundant code.
 * Add support for cities
 * other sources for this data? [MainFacts](http://mainfacts.com/ip-address-space-addresses), [NirSoft](http://www.nirsoft.net/countryip/)
   Also maybe allow providers to accept their own options?
-* release 1.0!
-* Detect nesting?  Putting in_eu?, in_europe?, and in_france? in your config generates a lot of redundant overlap.
-* Add support for for-pay features like lat/lon and timezones?
 
 
 ## License
 
-MIT.  Any downloaded data is copyrighted by the provider you downloaded it from.
+The code is MIT.  Downloaded data is copyrighted by the provider you downloaded it from.
 
 
 ## Contributing

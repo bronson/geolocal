@@ -108,7 +108,7 @@ describe Geolocal::Provider::Base do
 
     before do
       Geolocal.configure do |config|
-        config.countries = { 'US': 'US' }
+        config.countries = { 'US' => 'US' }
       end
     end
 
