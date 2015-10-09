@@ -66,7 +66,7 @@ describe Geolocal::Provider::Base do
 
     it 'refuses invalid identifiers' do
       Geolocal.configure do |config|
-        config.countries = { '1nation': 'US' }
+        config.countries = { '1nation' => 'US' }
       end
 
       expect { provider.countries }.to raise_error(/invalid identifier/)
