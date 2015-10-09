@@ -1,5 +1,9 @@
 # Geolocal
 
+[![Build Status](https://travis-ci.org/bronson/geolocal.svg?branch=master)](https://travis-ci.org/bronson/geolocal)
+[![Gem Version](https://badge.fury.io/rb/geolocal.svg)](http://badge.fury.io/rb/geolocal)
+
+
 Geocode IP addresses with a single Ruby if statement.
 No network access, no context switches, no delay,
 just one low-calorie lookup.
